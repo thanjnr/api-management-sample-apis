@@ -48,7 +48,10 @@ builder.Services.AddDbContext<TodoDbContext>(options =>
 /*
 ** Automapper
 */
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile(new MappingProfile());
+});
 
 /*
 ** The Data Service.
