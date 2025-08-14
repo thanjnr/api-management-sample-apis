@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Todo.RestApi", "src\Todo.Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.GraphQLApi", "src\Todo.GraphQLApi\Todo.GraphQLApi.csproj", "{9E758950-45A0-45E1-90C9-497B21E00E39}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Todo.ClientApi", "src\Todo.ClientApi\Todo.ClientApi.csproj", "{D9A3DE39-C9EF-2C5D-DFF4-7D9B07C94B80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9E758950-45A0-45E1-90C9-497B21E00E39}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9E758950-45A0-45E1-90C9-497B21E00E39}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9E758950-45A0-45E1-90C9-497B21E00E39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9A3DE39-C9EF-2C5D-DFF4-7D9B07C94B80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9A3DE39-C9EF-2C5D-DFF4-7D9B07C94B80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9A3DE39-C9EF-2C5D-DFF4-7D9B07C94B80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9A3DE39-C9EF-2C5D-DFF4-7D9B07C94B80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -48,6 +48,7 @@ param resourceGroupName string = ''
 param starwarsRestServiceName string = ''
 param todoRestServiceName string = ''
 param todoGraphQLServiceName string = ''
+param todoClientServiceName string = ''
 
 // Web applications
 param todoReactRestWebServiceName string = ''
@@ -207,6 +208,21 @@ module todoRestApiService './app/todo-rest-api.bicep' = {
     appServicePlanId: appServicePlan.outputs.id
     apiManagementServiceName: apiManagement.outputs.serviceName
     apiManagementLoggerName: apiManagement.outputs.loggerName
+  }
+}
+
+// ---------------------------------------------------------------------------------------------
+//  API: Todo Client
+// ---------------------------------------------------------------------------------------------
+module todoClientApiService './app/todo-client-api.bicep' = {
+  name: 'todo-client-api-service'
+  scope: rg
+  params: {
+    name: !empty(todoClientServiceName) ? todoClientServiceName : 'todo-client-${resourceToken}'
+    location: location
+    tags: union(tags, { 'azd-service-name': 'todo-client' })
+    applicationInsightsName: monitoring.outputs.applicationInsightsName
+    appServicePlanId: appServicePlan.outputs.id
   }
 }
 

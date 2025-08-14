@@ -17,3 +17,7 @@ services:
     dist: build
     language: js
     host: staticwebapp
+  todo-client:
+    project: ./src/Todo.ClientApi
+    language: csharp
+    host: appservice
