@@ -3,6 +3,10 @@
     "appInsights1": {
       "ignored": "true",
       "type": "appInsights"
+    },
+    "mssql1": {
+      "ignored": "true",
+      "type": "mssql"
     }
   }
 }

@@ -19,7 +19,7 @@ module apiService '../core/host/appservice.bicep' = {
     appSettings: appSettings
     connectionStrings: connectionStrings
     runtimeName: 'dotnetcore'
-    runtimeVersion: '9.0'
+    runtimeVersion: '8.0'
     scmDoBuildDuringDeployment: false
     useManagedIdentity: true
   }

@@ -1,0 +1,24 @@
+<policies>
+    <inbound>
+        <base />
+        <cache-lookup vary-by-developer="false" vary-by-developer-groups="false" downstream-caching-type="public">
+            <vary-by-header>Accept</vary-by-header>
+        </cache-lookup>
+        <validate-azure-ad-token tenant-id="dca398af-a48c-4d63-bdbd-4fa72a364d97" header-name="Authorization" authentication-endpoint="https://login-microsoftonline.com" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized: Access token is missing">
+            <client-application-ids>
+                <application-id>e4124b31-3c67-4a2d-b87b-8faf79add161</application-id>
+            </client-application-ids>
+        </validate-azure-ad-token>
+    </inbound>
+    <backend>
+        <base />
+    </backend>
+    <outbound>
+        <base />
+        <!-- Store all responses as cached elements for 10 minutes -->
+        <cache-store duration="600" />
+    </outbound>
+    <on-error>
+        <base />
+    </on-error>
+</policies>

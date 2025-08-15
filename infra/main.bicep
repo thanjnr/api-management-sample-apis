@@ -175,41 +175,41 @@ module starWarsRestApiService './app/starwars-rest-api.bicep' = {
   }
 }
 
-// ---------------------------------------------------------------------------------------------
-//  API: Star Wars Synthetic GraphQL
-// ---------------------------------------------------------------------------------------------
-module starWarsSynQLApiService './app/starwars-syngql-api.bicep' = {
-  name: 'starwars-syngql-api-service'
-  scope: rg
-  params: {
-    apiManagementServiceName: apiManagement.outputs.serviceName
-    apiManagementLoggerName: apiManagement.outputs.loggerName
-    serviceUri: starWarsRestApiService.outputs.serviceUri
-  }
-}
+// // ---------------------------------------------------------------------------------------------
+// //  API: Star Wars Synthetic GraphQL
+// // ---------------------------------------------------------------------------------------------
+// module starWarsSynQLApiService './app/starwars-syngql-api.bicep' = {
+//   name: 'starwars-syngql-api-service'
+//   scope: rg
+//   params: {
+//     apiManagementServiceName: apiManagement.outputs.serviceName
+//     apiManagementLoggerName: apiManagement.outputs.loggerName
+//     serviceUri: starWarsRestApiService.outputs.serviceUri
+//   }
+// }
 
-// ---------------------------------------------------------------------------------------------
-//  API: Todo REST
-// ---------------------------------------------------------------------------------------------
-module todoRestApiService './app/todo-rest-api.bicep' = {
-  name: 'todo-rest-api-service'
-  scope: rg
-  params: {
-    name: !empty(todoRestServiceName) ? todoRestServiceName : 'todo-rest-${resourceToken}'
-    location: location
-    tags: union(tags, { 'azd-service-name': 'todo-rest' })
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
-    connectionStrings: {
-      DefaultConnection: {
-        type: 'SQLAzure'
-        value: '${database.outputs.connectionString}; Password=${sqlAdminPassword}'
-      }
-    }
-    appServicePlanId: appServicePlan.outputs.id
-    apiManagementServiceName: apiManagement.outputs.serviceName
-    apiManagementLoggerName: apiManagement.outputs.loggerName
-  }
-}
+// // ---------------------------------------------------------------------------------------------
+// //  API: Todo REST
+// // ---------------------------------------------------------------------------------------------
+// module todoRestApiService './app/todo-rest-api.bicep' = {
+//   name: 'todo-rest-api-service'
+//   scope: rg
+//   params: {
+//     name: !empty(todoRestServiceName) ? todoRestServiceName : 'todo-rest-${resourceToken}'
+//     location: location
+//     tags: union(tags, { 'azd-service-name': 'todo-rest' })
+//     applicationInsightsName: monitoring.outputs.applicationInsightsName
+//     connectionStrings: {
+//       DefaultConnection: {
+//         type: 'SQLAzure'
+//         value: '${database.outputs.connectionString}; Password=${sqlAdminPassword}'
+//       }
+//     }
+//     appServicePlanId: appServicePlan.outputs.id
+//     apiManagementServiceName: apiManagement.outputs.serviceName
+//     apiManagementLoggerName: apiManagement.outputs.loggerName
+//   }
+// }
 
 // ---------------------------------------------------------------------------------------------
 //  API: Todo Client
@@ -223,41 +223,53 @@ module todoClientApiService './app/todo-client-api.bicep' = {
     tags: union(tags, { 'azd-service-name': 'todo-client' })
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     appServicePlanId: appServicePlan.outputs.id
-  }
-}
-
-module todoReactApp './app/todo-react-rest.bicep' = {
-  name: 'todo-react-rest-app'
-  scope: rg
-  params: {
-    name: !empty(todoReactRestWebServiceName) ? todoReactRestWebServiceName : 'todo-rest-${abbrs.webStaticSites}${resourceToken}'
-    location: !empty(staticSitesLocationName) ? staticSitesLocationName : location
-    tags: union(tags, { 'azd-service-name': 'todo-react-rest' })
-  }
-}
-
-// ---------------------------------------------------------------------------------------------
-//  API: Todo GraphQL
-// ---------------------------------------------------------------------------------------------
-module todoGraphQLApiService './app/todo-graphql-api.bicep' = {
-  name: 'todo-graphql-api-service'
-  scope: rg
-  params: {
-    name: !empty(todoGraphQLServiceName) ? todoGraphQLServiceName : 'todo-graphql-${resourceToken}'
-    location: location
-    tags: union(tags, { 'azd-service-name': 'todo-graphql' })
-    applicationInsightsName: monitoring.outputs.applicationInsightsName
-    connectionStrings: {
-      DefaultConnection: {
-        type: 'SQLAzure'
-        value: '${database.outputs.connectionString}; Password=${sqlAdminPassword}'
-      }
+    appSettings: {
+      AzureAd__Instance: environment().authentication.loginEndpoint
+      AzureAd__TenantId: tenant().tenantId
+      AzureAd__ClientId: 'e4124b31-3c67-4a2d-b87b-8faf79add161'
+      AzureAd__ClientSecret: 'Secret'
+      InternalApiSettings__BaseUrl: 'https://apim-qwsdc33eoxype.azure-api.net/starwars-rest'
+      InternalApiSettings__Scope: 'api://50d72824-0274-4e4d-a194-3504ee2e321e/.default'     
+      InternalApiSettings__SecurityKey: '3ac33b2eadf9ff2fc80183c400b40d53'   
+      InternalApiSettings__ValidAudience: 'api://50d72824-0274-4e4d-a194-3504ee2e321e'      
+      InternalApiSettings__TokenUrl: 'api://50d72824-0274-4e4d-a194-3504ee2e321e'
+      InternalApiSettings__TenantId: tenant().tenantId
     }
-    appServicePlanId: appServicePlan.outputs.id
-    apiManagementServiceName: apiManagement.outputs.serviceName
-    apiManagementLoggerName: apiManagement.outputs.loggerName
   }
 }
+
+// module todoReactApp './app/todo-react-rest.bicep' = {
+//   name: 'todo-react-rest-app'
+//   scope: rg
+//   params: {
+//     name: !empty(todoReactRestWebServiceName) ? todoReactRestWebServiceName : 'todo-rest-${abbrs.webStaticSites}${resourceToken}'
+//     location: !empty(staticSitesLocationName) ? staticSitesLocationName : location
+//     tags: union(tags, { 'azd-service-name': 'todo-react-rest' })
+//   }
+// }
+
+// // ---------------------------------------------------------------------------------------------
+// //  API: Todo GraphQL
+// // ---------------------------------------------------------------------------------------------
+// module todoGraphQLApiService './app/todo-graphql-api.bicep' = {
+//   name: 'todo-graphql-api-service'
+//   scope: rg
+//   params: {
+//     name: !empty(todoGraphQLServiceName) ? todoGraphQLServiceName : 'todo-graphql-${resourceToken}'
+//     location: location
+//     tags: union(tags, { 'azd-service-name': 'todo-graphql' })
+//     applicationInsightsName: monitoring.outputs.applicationInsightsName
+//     connectionStrings: {
+//       DefaultConnection: {
+//         type: 'SQLAzure'
+//         value: '${database.outputs.connectionString}; Password=${sqlAdminPassword}'
+//       }
+//     }
+//     appServicePlanId: appServicePlan.outputs.id
+//     apiManagementServiceName: apiManagement.outputs.serviceName
+//     apiManagementLoggerName: apiManagement.outputs.loggerName
+//   }
+// }
 
 // ---------------------------------------------------------------------------------------------
 //  OUTPUTS
@@ -270,11 +282,11 @@ output API_MANAGEMENT_SERVICE_URI string = apiManagement.outputs.uri
 output AZURE_LOCATION string = location
 output AZURE_TENANT_ID string = tenant().tenantId
 output STARWARS_REST_GATEWAY_URI string = starWarsRestApiService.outputs.gatewayUri
-output STARWARS_SYNGQL_GATEWAY_URI string = starWarsSynQLApiService.outputs.gatewayUri
-output TODO_REST_GATEWAY_URI string = todoRestApiService.outputs.gatewayUri
-output TODO_GRAPHQL_GATEWAY_URI string = todoGraphQLApiService.outputs.gatewayUri
+// output STARWARS_SYNGQL_GATEWAY_URI string = starWarsSynQLApiService.outputs.gatewayUri
+// output TODO_REST_GATEWAY_URI string = todoRestApiService.outputs.gatewayUri
+// output TODO_GRAPHQL_GATEWAY_URI string = todoGraphQLApiService.outputs.gatewayUri
 
 // Outputs for the TODO_REACT_REST app
-output TODO_REACT_REST_API_BASE_URL string = todoRestApiService.outputs.gatewayUri
+// output TODO_REACT_REST_API_BASE_URL string = todoRestApiService.outputs.gatewayUri
 output TODO_REACT_REST_APPLICATIONINSIGHTS_CONNECTION_STRING string = monitoring.outputs.applicationInsightsConnectionString
-output TODO_REACT_REST_WEB_BASE_URL string = todoReactApp.outputs.SERVICE_WEB_URI
+// output TODO_REACT_REST_WEB_BASE_URL string = todoReactApp.outputs.SERVICE_WEB_URI

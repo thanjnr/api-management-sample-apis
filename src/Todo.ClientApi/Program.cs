@@ -1,9 +1,14 @@
 // Copyright (c) Microsoft Corporation. All Rights Reserved.
 // Licensed under the MIT License.
 
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Todo.ClientApi;
+using Todo.ClientApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,19 @@ var builder = WebApplication.CreateBuilder(args);
 ** Application Insights logging
 */
 builder.Services.AddApplicationInsightsTelemetry();
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApi(builder.Configuration, "AzureAd")
+    .EnableTokenAcquisitionToCallDownstreamApi()
+    .AddInMemoryTokenCaches();
+
+builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationScheme, options =>
+{
+    // Set your custom IssuerSigningKey here
+    // Example: using a SymmetricSecurityKey from a byte array
+    options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["InternalApiSettings:IssuerSigningKey"] ?? string.Empty));
+    options.TokenValidationParameters.ValidAudience = builder.Configuration["InternalApiSettings:ValidAudience"];
+});
 
 /*
 ** CORS
@@ -34,6 +52,8 @@ builder.Services.AddCors(options =>
 ** The Data Service.
 */
 //builder.Services.AddScoped<ITodoDataService, TodoDataService>();
+
+builder.Services.AddTransient<ITokenClientHelper, TokenClientHelper>();
 
 /*
 ** Controllers.
@@ -56,6 +76,11 @@ builder.Services.AddSwaggerGen();
 ** HttpClient.
 */
 builder.Services.AddHttpClient();
+
+/*
+** InternalApiSettings.
+*/
+builder.Services.Configure<InternalApiSettings>(builder.Configuration.GetSection("InternalApiSettings"));
 
 /******************************************************************************************
 **
