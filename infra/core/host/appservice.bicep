@@ -29,7 +29,7 @@ param use32BitWorkerProcess bool = false
 
 var portalOrigins = [ 'https://portal.azure.com', 'https://ms.portal.azure.com' ]
 
-resource appService 'Microsoft.Web/sites@2022-03-01' = {
+resource appService 'Microsoft.Web/sites@2024-11-01' = {
   name: name
   location: location
   tags: tags
