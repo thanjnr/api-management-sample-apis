@@ -8,15 +8,15 @@ using Todo.ClientApi.Services;
 namespace Todo.ClientApi.Controllers;
 
 [ApiController]
-[Route("/todo/lists")]
-public class ListsController : ControllerBase
+[Route("/anonymous/todo/lists")]
+public class AnonymousListsController : ControllerBase
 {
     private readonly InternalApiSettings apiSettings;
     private readonly IAuthService authService;
     private readonly IHttpContextAccessor contextAccessor;
     private readonly IHttpClientFactory httpClientFactory;
 
-    public ListsController(IOptions<InternalApiSettings> settings, IAuthService authService, IHttpClientFactory factory, IHttpContextAccessor contextAccessor)
+    public AnonymousListsController(IOptions<InternalApiSettings> settings, IAuthService authService, IHttpClientFactory factory, IHttpContextAccessor contextAccessor)
     {
         this.apiSettings = settings.Value;
         this.authService = authService;
@@ -29,7 +29,7 @@ public class ListsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(List<TodoList>))]
     public async Task<TodoListPage> GetListsAsync([FromQuery(Name = "$skip")] int? skip = null, [FromQuery(Name = "$top")] int? batchSize = null)
     {
-        var swaggerClient = new swaggerClient(this.apiSettings.BaseUrl, await GetHttpClient());
+        var swaggerClient = new swaggerClient(this.apiSettings.BaseUrl, GetHttpClient());
         return await swaggerClient.ListsGETAsync(skip, batchSize);
     }
 
@@ -38,15 +38,13 @@ public class ListsController : ControllerBase
     [ProducesResponseType(200, Type = typeof(List<TodoList>))]
     public async Task<TodoItemPage> GetItemsAsync([FromRoute(Name = "list_id")] string listId, [FromQuery(Name = "$skip")] int? skip = null, [FromQuery(Name = "$top")] int? batchSize = null)
     {
-        var swaggerClient = new swaggerClient(this.apiSettings.BaseUrl, await GetHttpClient());
+        var swaggerClient = new swaggerClient(this.apiSettings.BaseUrl, GetHttpClient());
         return await swaggerClient.ItemsGETAsync(listId, skip, batchSize);
     }
 
-    private async Task<HttpClient> GetHttpClient()
+    private HttpClient GetHttpClient()
     {
-        var token = await this.authService.GetAccessTokenAsync();
         var client = httpClientFactory.CreateClient();
-        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
         return client;
     }

@@ -2,8 +2,10 @@
 // Licensed under the MIT License.
 
 using Microsoft.EntityFrameworkCore;
+using System.Runtime;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Todo.ClientApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +58,9 @@ builder.Services.AddSwaggerGen();
 ** HttpClient.
 */
 builder.Services.AddHttpClient();
+
+builder.Services.AddOptions<InternalApiSettings>()
+    .Bind(builder.Configuration.GetSection("InternalApiSettings"));
 
 /******************************************************************************************
 **
