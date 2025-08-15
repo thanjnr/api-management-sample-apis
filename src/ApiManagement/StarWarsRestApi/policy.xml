@@ -4,6 +4,9 @@
         <cache-lookup caching-type="prefer-external" downstream-caching-type="public" vary-by-developer="false" vary-by-developer-groups="false">
             <vary-by-header>Accept</vary-by-header>
         </cache-lookup>
+        <validate-jwt header-name="Authorization" failed-validation-httpcode="401" failed-validation-error-message="Unauthorized: Access token is missing">
+            <openid-config url="https://login.microsoftonline.com/dca398af-a48c-4d63-bdbd-4fa72a364d97/.well-known/openid-configuration" />
+        </validate-jwt>
     </inbound>
     <backend>
         <base />

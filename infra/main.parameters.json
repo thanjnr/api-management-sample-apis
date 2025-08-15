@@ -12,7 +12,7 @@
             "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} sqlAdminPassword)"
         },
         "appInsightsLocationName": {
-            "value": "southcentralus"
+            "value": "${AZURE_LOCATION}"
         },
         "staticSitesLocationName": {
             "value": "centralus"

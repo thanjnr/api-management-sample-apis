@@ -19,7 +19,7 @@ module apiService '../core/host/appservice.bicep' = {
     appServicePlanId: appServicePlanId
     appSettings: {}
     runtimeName: 'dotnetcore'
-    runtimeVersion: '9.0'
+    runtimeVersion: '8.0'
     scmDoBuildDuringDeployment: false
   }
 }
