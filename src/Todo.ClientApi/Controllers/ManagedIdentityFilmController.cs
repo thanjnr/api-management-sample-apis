@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Microsoft Corporation. All Rights Reserved.
 // Licensed under the MIT License.
 
+using Azure.Core;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Todo.ClientApi.Services;
@@ -8,15 +9,15 @@ using Todo.ClientApi.Services;
 namespace Todo.ClientApi.Controllers;
 
 [ApiController]
-[Route("/api/films")]
-public class FilmController : ControllerBase
+[Route("mi/api/films")]
+public class ManagedIdentityFilmController : ControllerBase
 {
     private readonly InternalApiSettings apiSettings;
     private readonly ITokenClientHelper authService;
     private readonly IHttpContextAccessor contextAccessor;
     private readonly IHttpClientFactory httpClientFactory;
 
-    public FilmController(IOptions<InternalApiSettings> settings, ITokenClientHelper authService, IHttpClientFactory factory, IHttpContextAccessor contextAccessor)
+    public ManagedIdentityFilmController(IOptions<InternalApiSettings> settings, ITokenClientHelper authService, IHttpClientFactory factory, IHttpContextAccessor contextAccessor)
     {
         this.apiSettings = settings.Value;
         this.authService = authService;
@@ -44,7 +45,7 @@ public class FilmController : ControllerBase
 
     private async Task<HttpClient> GetHttpClient()
     {
-        var token = await this.authService.GetAccessTokenAsync();
+        var token = await this.authService.GetManagedIdentityAccessTokenAsync();
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", token);
 

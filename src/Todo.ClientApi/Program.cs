@@ -31,7 +31,6 @@ builder.Services.Configure<JwtBearerOptions>(JwtBearerDefaults.AuthenticationSch
 {
     // Set your custom IssuerSigningKey here
     // Example: using a SymmetricSecurityKey from a byte array
-    var secretKey = "YourSuperSecretKeyThatIsAtLeast16CharactersLong"; // Replace with a strong, securely stored key
     options.TokenValidationParameters.IssuerSigningKey = new SymmetricSecurityKey(Convert.FromBase64String(builder.Configuration["InternalApiSettings:IssuerSigningKey"] ?? string.Empty));
     options.TokenValidationParameters.ValidAudience = builder.Configuration["InternalApiSettings:ValidAudience"];
 });
@@ -54,7 +53,7 @@ builder.Services.AddCors(options =>
 */
 //builder.Services.AddScoped<ITodoDataService, TodoDataService>();
 
-builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<ITokenClientHelper, TokenClientHelper>();
 
 /*
 ** Controllers.
