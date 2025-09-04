@@ -5,16 +5,22 @@ using Microsoft.Identity.Abstractions;
 
 namespace Todo.ClientApi.Services
 {
-    public class TokenClientHelper(IOptions<InternalApiSettings> settings, IAuthorizationHeaderProvider authorizationHeaderProvider) : ITokenClientHelper
+    public class TokenClientHelper(
+        IOptions<InternalApiSettings> settings,
+        IAuthorizationHeaderProvider authorizationHeaderProvider,
+        ILogger<ITokenClientHelper> logger) : ITokenClientHelper
     {
         private readonly InternalApiSettings _internalApiSettings = settings.Value;
         private readonly IAuthorizationHeaderProvider _authorizationHeaderProvider = authorizationHeaderProvider;
+        private readonly ILogger<ITokenClientHelper> _logger = logger;
 
         public async Task<string> GetAccessTokenAsync()
         {
             ValidateSettings();
 
             string token = await _authorizationHeaderProvider.CreateAuthorizationHeaderForAppAsync(_internalApiSettings.Scope);
+
+            _logger.LogInformation($"Token: {token}");
 
             return token;
         }
@@ -25,7 +31,9 @@ namespace Todo.ClientApi.Services
 
             string token = await GetAccessTokenWithManagedIdentityAsync(_internalApiSettings.Scope);
 
-            return token;
+            _logger.LogInformation($"Token: {token}");
+
+            return $"Bearer {token}";
         }
 
         private void ValidateSettings()

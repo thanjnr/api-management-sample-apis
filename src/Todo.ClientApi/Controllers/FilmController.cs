@@ -45,7 +45,6 @@ public class FilmController : ControllerBase
     private async Task<HttpClient> GetHttpClient()
     {
         var token = await this.authService.GetAccessTokenAsync();
-        throw new Exception(token);
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", token);
 

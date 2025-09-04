@@ -46,7 +46,6 @@ public class ManagedIdentityFilmController : ControllerBase
     private async Task<HttpClient> GetHttpClient()
     {
         var token = await this.authService.GetManagedIdentityAccessTokenAsync();
-        throw new Exception(token);
         var client = httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.Add("Authorization", token);
 
